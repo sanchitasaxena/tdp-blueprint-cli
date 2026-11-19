@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Blueprints — Platform Engineer</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #080808;
+        --terminal: #171717;
+        --text: #dedede;
+        --muted: #9a9a9a;
+        --pink: #f04e98;
+        --green: #8ed6a3;
+        --line: #333;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      .page-title {
+        overflow: hidden;
+        padding: 5px 0 29px;
+        color: var(--pink);
+        font-size: clamp(24px, 4vw, 42px);
+        font-weight: 700;
+        letter-spacing: .01em;
+        line-height: 1.15;
+        white-space: nowrap;
+      }
+
+      .window {
+        width: min(100%, 1120px);
+        min-height: calc(100vh - 82px);
+        margin: 0 auto;
+        background: var(--terminal);
+        box-shadow: 0 0 0 1px #222;
+      }
+
+      .window-bar {
+        position: sticky;
+        z-index: 2;
+        top: 0;
+        display: flex;
+        height: 36px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 13px;
+        background: #ededed;
+        color: #777;
+      }
+
+      .window-controls { display: flex; gap: 18px; font-size: 13px; }
+      .window-title { color: #555; font: 11px Arial, sans-serif; }
+      .close { font: 16px Arial, sans-serif; }
+
+      .terminal {
+        max-width: 880px;
+        padding: 17px 18px 52px;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+
+      p { margin: 0 0 12px; }
+      .command { margin-bottom: 16px; }
+      .muted { color: var(--muted); }
+      .section-title { margin: 21px 0 7px; color: #e8e8e8; }
+      .divider { color: #777; }
+      .prompt { color: #f2f2f2; }
+
+      .dashed {
+        margin: 8px 0 17px -8px;
+        padding: 8px;
+        border: 1px dashed var(--pink);
+      }
+
+      .field-line { margin: 3px 0 9px; }
+      .text-field {
+        min-width: 190px;
+        max-width: 100%;
+        border: 0;
+        border-bottom: 1px solid #6b6b6b;
+        border-radius: 0;
+        outline: none;
+        background: transparent;
+        color: #fff;
+        font: inherit;
+        padding: 2px 3px;
+      }
+
+      .text-field:focus { border-bottom-color: var(--pink); }
+      .source-field { width: min(440px, 100%); }
+      .name-field { width: 210px; }
+      .description-field { width: min(450px, 100%); }
+
+      .choices { margin: 4px 0 9px; }
+      .choice {
+        display: flex;
+        width: fit-content;
+        min-height: 21px;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      input[type="checkbox"], input[type="radio"] {
+        width: 13px;
+        height: 13px;
+        margin: 0;
+        accent-color: var(--pink);
+        cursor: pointer;
+      }
+
+      .subtle { color: #aaa; }
+      .variable { margin: 14px 0 20px; }
+      .variable-options { margin: 5px 0 10px 12px; }
+      .value-list { margin: 5px 0 0 13px; }
+      .value-row { display: flex; align-items: center; gap: 7px; margin: 4px 0; }
+      .value-field { width: 180px; }
+      .add-value {
+        border: 0;
+        padding: 1px 5px;
+        background: transparent;
+        color: var(--pink);
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .review {
+        margin: 18px 0 14px;
+        padding: 10px 12px;
+        border-left: 2px solid #555;
+        background: #1c1c1c;
+        white-space: pre-wrap;
+      }
+
+      .review-heading { margin-bottom: 9px; color: #fff; }
+      .review-line { display: flex; gap: 14px; margin: 2px 0; }
+      .review-label { min-width: 115px; color: #aaa; }
+      .tags-list, .review-values { margin-left: 13px; }
+      .create-row { display: flex; align-items: center; gap: 13px; margin-top: 15px; }
+      .create-button {
+        border: 1px solid var(--pink);
+        padding: 8px 13px;
+        background: var(--pink);
+        color: #151515;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .create-button:hover { background: #ff78b4; }
+      .success { margin-top: 18px; color: var(--green); }
+      .success-details { margin-top: 10px; color: var(--text); }
+      .restart {
+        margin-top: 20px;
+        border: 0;
+        border-bottom: 1px solid #777;
+        padding: 2px 0;
+        background: transparent;
+        color: #bdbdbd;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      @media (max-width: 600px) {
+        .page-title { padding-bottom: 20px; }
+        .terminal { padding: 14px 13px 40px; font-size: 11px; }
+        .dashed { margin-left: -5px; padding: 7px; }
+        .review-label { min-width: 94px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-title">Create Blueprints- Platform Engineer</header>
+    <main class="window">
+      <div class="window-bar" aria-hidden="true">
+        <div class="window-controls"><span>○</span><span>‹›</span><span>□</span></div>
+        <span class="window-title">Blueprint setup</span>
+        <span class="close">×</span>
+      </div>
+
+      <section class="terminal" aria-label="Interactive blueprint creation terminal">
+        <p class="command">ken.fisher@hashicorp ~ $ tfctl blueprint create</p>
+
+        <p>Enter blueprint name: <input class="text-field name-field" id="blueprint-name" value="my-s3-blueprint" aria-label="Blueprint name"></p>
+        <p>Enter blueprint description: <input class="text-field description-field" id="blueprint-description" value="S3 bucket blueprint for dev workloads" aria-label="Blueprint description"></p>
+
+        <div class="dashed">
+          <p>Enter the registry module source: <input class="text-field source-field" id="module-source" value="terraform-aws-modules/s3-bucket/aws" aria-label="Registry module source"></p>
+          <p class="field-line">Select module version:</p>
+          <div class="choices" id="versions">
+            <label class="choice"><input type="radio" name="version" value="5.10.0" checked> <span class="marker">[x]</span> 5.10.0</label>
+            <label class="choice"><input type="radio" name="version" value="5.9.0"> <span class="marker">[ ]</span> 5.9.0</label>
+            <label class="choice"><input type="radio" name="version" value="5.8.0"> <span class="marker">[ ]</span> 5.8.0</label>
+            <label class="choice"><input type="radio" name="version" value="5.7.0"> <span class="marker">[ ]</span> 5.7.0</label>
+          </div>
+        </div>
+
+        <p class="section-title">Select Project(s):</p>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="project" value="Project_1"> <span class="marker">[ ]</span> Project_1</label>
+          <label class="choice"><input type="checkbox" name="project" value="Project_2"> <span class="marker">[ ]</span> Project_2</label>
+          <label class="choice"><input type="checkbox" name="project" value="Project_3" checked> <span class="marker">[x]</span> Project_3</label>
+          <label class="choice"><input type="checkbox" name="project" value="Project_4"> <span class="marker">[ ]</span> Project_4</label>
+          <label class="choice"><input type="checkbox" name="project" value="Project_5"> <span class="marker">[ ]</span> Project_5</label>
+          <label class="choice"><input type="checkbox" name="project" value="Project_6"> <span class="marker">[ ]</span> Project_6</label>
+        </div>
+
+        <p class="section-title">Select environment(s):</p>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="environment" value="Prod"> <span class="marker">[ ]</span> Prod</label>
+          <label class="choice"><input type="checkbox" name="environment" value="Test" checked> <span class="marker">[x]</span> Test</label>
+          <label class="choice"><input type="checkbox" name="environment" value="Dev"> <span class="marker">[ ]</span> Dev</label>
+          <label class="choice"><input type="checkbox" name="environment" value="Stage"> <span class="marker">[ ]</span> Stage</label>
+        </div>
+
+        <div class="dashed">
+          <p class="section-title" style="margin-top:0">TAGS</p>
+          <p class="divider">----</p>
+          <label class="choice"><input id="tag-toggle" type="checkbox" checked> Do you want this blueprint's resulting workspace or stack to have a tag? (Y/N)</label>
+          <div id="tag-fields">
+            <p class="field-line">Enter tag value: <input class="text-field" name="tag" value="test" aria-label="Tag value"></p>
+            <label class="choice"><input id="second-tag-toggle" type="checkbox" checked> Add another tag? (Y/N)</label>
+            <p class="field-line" id="second-tag">Enter tag value: <input class="text-field" name="tag" value="platform-team" aria-label="Second tag value"></p>
+            <label class="choice"><input id="third-tag-toggle" type="checkbox"> Add another tag? (Y/N)</label>
+            <p class="field-line" id="third-tag" hidden>Enter tag value: <input class="text-field" name="tag" value="" placeholder="tag value" aria-label="Third tag value"></p>
+          </div>
+        </div>
+
+        <p class="section-title">VARIABLE INPUTS</p>
+        <p class="divider">----------------</p>
+        <p>Variables were detected from registry artifact...</p>
+        <p>Select variables for which you would like to dictate input options...</p>
+        <div class="choices variable-options">
+          <label class="choice"><input type="checkbox" name="variable" value="bucket_name"> <span class="marker">[ ]</span> bucket_name (string)</label>
+          <label class="choice"><input type="checkbox" name="variable" value="retention_days" checked> <span class="marker">[x]</span> retention_days (list(number))</label>
+          <label class="choice"><input type="checkbox" name="variable" value="allow_storage_classes" checked> <span class="marker">[x]</span> allow_storage_classes (list(string))</label>
+        </div>
+
+        <div class="variable" data-variable="retention_days">
+          <p>Variable name: retention_days</p>
+          <p>Variable type: list(number)</p>
+          <p>Variable description: A list of valid retention periods (in days) that users can choose from.</p>
+          <div class="value-list" data-values="retention_days">
+            <p>Add an option (Y/N): Y</p>
+            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="7" aria-label="Retention days option"></div>
+            <p>Add another option (Y/N): Y</p>
+            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="14" aria-label="Retention days option"></div>
+            <p>Add another option (Y/N): Y</p>
+            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="30" aria-label="Retention days option"></div>
+            <button type="button" class="add-value" data-add-value="retention_days">+ Add option</button>
+          </div>
+        </div>
+
+        <div class="variable" data-variable="allow_storage_classes">
+          <p>Variable name: allow_storage_classes</p>
+          <p>Variable type: list(string)</p>
+          <p>Variable description: A list of storage classes users may choose from.</p>
+          <div class="value-list" data-values="allow_storage_classes">
+            <p>Add an option (Y/N): Y</p>
+            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="Standard" aria-label="Storage class option"></div>
+            <p>Add another option (Y/N): Y</p>
+            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="Standard_IA" aria-label="Storage class option"></div>
+            <button type="button" class="add-value" data-add-value="allow_storage_classes">+ Add option</button>
+          </div>
+        </div>
+
+        <div class="review">
+          <p class="review-heading">REVIEW<br>-------</p>
+          <div id="review-content"></div>
+        </div>
+
+        <div class="create-row">
+          <button type="button" class="create-button" id="create-button">Create this blueprint</button>
+          <span>(Y/N)</span>
+        </div>
+        <div id="result" aria-live="polite"></div>
+        <button type="button" class="restart" id="restart">↻ Start over</button>
+      </section>
+    </main>
+
+    <script>
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+      function selectedValues(name) {
+        return $$(`input[name="${name}"]:checked`).map(input => input.value);
+      }
+
+      function variableValues(name) {
+        const values = $$(`[data-values="${name}"] .value-field`)
+          .map(input => input.value.trim())
+          .filter(Boolean);
+        return values;
+      }
+
+      function refreshReview() {
+        $$(".choice").forEach(label => {
+          const input = $("input", label);
+          const marker = $(".marker", label);
+          if (input && marker) marker.textContent = input.checked ? "[x]" : "[ ]";
+        });
+        const projects = selectedValues("project");
+        const environments = selectedValues("environment");
+        const version = $('input[name="version"]:checked').value;
+        const tags = $("#tag-toggle").checked
+          ? $$('input[name="tag"]').map(input => input.value.trim()).filter(Boolean)
+          : [];
+        const variables = selectedValues("variable");
+        const lines = [
+          ["Blueprint name:", $("#blueprint-name").value || "—"],
+          ["Source:", `${$("#module-source").value || "—"}@${version}`],
+          ["Configuration:", "Stack"],
+          ["Projects:", projects.join(", ") || "—"],
+          ["Environments:", environments.join(", ") || "—"],
+          ["", ""],
+          ["Tags:", tags.join(", ") || "—"],
+          ["", ""],
+          ["Variables:", variables.length ? "" : "—"]
+        ];
+
+        const rows = lines.map(([label, value]) => label
+          ? `<div class="review-line"><span class="review-label">${label}</span><span>${escapeHtml(value)}</span></div>`
+          : `<div class="review-line" aria-hidden="true">&nbsp;</div>`).join("");
+        const variableRows = variables.map(name => {
+          const label = name === "retention_days" ? "retention_days" : name;
+          const values = variableValues(name);
+          return `<div class="review-values">${escapeHtml(label)}${values.map(value => `<br>&nbsp;&nbsp;- ${escapeHtml(value)}`).join("")}</div>`;
+        }).join("");
+        $("#review-content").innerHTML = rows + variableRows;
+
+        $$(".variable").forEach(section => {
+          const input = $(`input[name="variable"][value="${section.dataset.variable}"]`);
+          section.hidden = !input.checked;
+        });
+        $("#tag-fields").hidden = !$("#tag-toggle").checked;
+        $("#second-tag").hidden = !$("#second-tag-toggle").checked;
+        $("#third-tag").hidden = !$("#third-tag-toggle").checked;
+      }
+
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, char => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[char]);
+      }
+
+      function addOption(name) {
+        const container = $(`[data-values="${name}"]`);
+        const row = document.createElement("div");
+        row.className = "value-row";
+        const label = document.createElement("span");
+        label.textContent = "Enter value:";
+        const input = document.createElement("input");
+        input.className = "text-field value-field";
+        input.setAttribute("aria-label", `${name.replaceAll("_", " ")} option`);
+        row.append(label, input);
+        container.insertBefore(row, $(`[data-add-value="${name}"]`));
+        input.focus();
+        refreshReview();
+      }
+
+      document.addEventListener("input", refreshReview);
+      document.addEventListener("change", refreshReview);
+      $$("[data-add-value]").forEach(button => {
+        button.addEventListener("click", () => addOption(button.dataset.addValue));
+      });
+
+      $("#create-button").addEventListener("click", () => {
+        const name = $("#blueprint-name").value.trim();
+        if (!name) {
+          $("#blueprint-name").focus();
+          $("#result").innerHTML = '<p class="success">Enter a blueprint name before creating.</p>';
+          return;
+        }
+        const id = `bp-${Math.floor(100000 + Math.random() * 900000)}`;
+        $("#result").innerHTML = `
+          <p class="success">Creating blueprint "${escapeHtml(name)}"...<br><br>Blueprint created successfully.</p>
+          <div class="success-details">
+            Blueprint name: &nbsp;&nbsp; ${escapeHtml(name)}<br>
+            Blueprint ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${id}<br>
+            Description: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml($("#blueprint-description").value)}<br>
+            Configuration: &nbsp;&nbsp;&nbsp; Stack<br>
+            Projects: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml(selectedValues("project").join(", ") || "—")}<br>
+            Environments: &nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml(selectedValues("environment").join(", ") || "—")}<br>
+            Source: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml($("#module-source").value)}<br>
+            Version: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml($('input[name="version"]:checked').value)}<br>
+            Status: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ready<br>
+            Created at: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${new Date().toISOString()}
+          </div>`;
+        $("#create-button").disabled = true;
+        $("#create-button").textContent = "Blueprint created";
+      });
+
+      $("#restart").addEventListener("click", () => window.location.reload());
+      refreshReview();
+    </script>
+  </body>
+</html>
