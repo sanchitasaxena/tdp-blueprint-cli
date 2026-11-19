@@ -10,7 +10,7 @@
         --bg: #080808;
         --terminal: #171717;
         --text: #dedede;
-        --muted: #9a9a9a;
+        --muted: #929292;
         --pink: #f04e98;
         --green: #8ed6a3;
         --line: #333;
@@ -37,19 +37,20 @@
       }
 
       .window {
+        display: flex;
         width: min(100%, 1120px);
-        min-height: calc(100vh - 82px);
+        height: calc(100vh - 82px);
+        min-height: 430px;
+        flex-direction: column;
         margin: 0 auto;
         background: var(--terminal);
         box-shadow: 0 0 0 1px #222;
       }
 
       .window-bar {
-        position: sticky;
-        z-index: 2;
-        top: 0;
         display: flex;
         height: 36px;
+        flex: 0 0 36px;
         align-items: center;
         justify-content: space-between;
         padding: 0 13px;
@@ -62,119 +63,73 @@
       .close { font: 16px Arial, sans-serif; }
 
       .terminal {
-        max-width: 880px;
-        padding: 17px 18px 52px;
-        font-size: 12px;
-        line-height: 1.55;
-      }
-
-      p { margin: 0 0 12px; }
-      .command { margin-bottom: 16px; }
-      .muted { color: var(--muted); }
-      .section-title { margin: 21px 0 7px; color: #e8e8e8; }
-      .divider { color: #777; }
-      .prompt { color: #f2f2f2; }
-
-      .dashed {
-        margin: 8px 0 17px -8px;
-        padding: 8px;
-        border: 1px dashed var(--pink);
-      }
-
-      .field-line { margin: 3px 0 9px; }
-      .text-field {
-        min-width: 190px;
-        max-width: 100%;
-        border: 0;
-        border-bottom: 1px solid #6b6b6b;
-        border-radius: 0;
-        outline: none;
-        background: transparent;
-        color: #fff;
-        font: inherit;
-        padding: 2px 3px;
-      }
-
-      .text-field:focus { border-bottom-color: var(--pink); }
-      .source-field { width: min(440px, 100%); }
-      .name-field { width: 210px; }
-      .description-field { width: min(450px, 100%); }
-
-      .choices { margin: 4px 0 9px; }
-      .choice {
         display: flex;
-        width: fit-content;
-        min-height: 21px;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
+        min-height: 0;
+        flex: 1;
+        flex-direction: column;
+        padding: 17px 18px 0;
+        font-size: 12px;
+        line-height: 1.6;
       }
 
-      input[type="checkbox"], input[type="radio"] {
-        width: 13px;
-        height: 13px;
-        margin: 0;
-        accent-color: var(--pink);
-        cursor: pointer;
+      .output {
+        min-height: 0;
+        flex: 1;
+        overflow: auto;
+        padding: 0 2px 20px 0;
+        scrollbar-color: #494949 transparent;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
       }
 
-      .subtle { color: #aaa; }
-      .variable { margin: 14px 0 20px; }
-      .variable-options { margin: 5px 0 10px 12px; }
-      .value-list { margin: 5px 0 0 13px; }
-      .value-row { display: flex; align-items: center; gap: 7px; margin: 4px 0; }
-      .value-field { width: 180px; }
-      .add-value {
-        border: 0;
-        padding: 1px 5px;
-        background: transparent;
-        color: var(--pink);
-        font: inherit;
-        cursor: pointer;
+      .line { min-height: 1.6em; }
+      .line.command { color: #f4f4f4; }
+      .line.muted { color: var(--muted); }
+      .line.section { margin-top: 13px; color: #f2f2f2; }
+      .line.success { color: var(--green); }
+      .line.error { color: #ff8c8c; }
+      .line.pink { color: var(--pink); }
+
+      .input-dock {
+        flex: 0 0 auto;
+        border-top: 1px solid #303030;
+        padding: 11px 0 13px;
+        background: var(--terminal);
       }
 
-      .review {
-        margin: 18px 0 14px;
-        padding: 10px 12px;
-        border-left: 2px solid #555;
-        background: #1c1c1c;
+      .active-line {
+        display: flex;
+        min-height: 24px;
+        align-items: baseline;
+        gap: 7px;
+      }
+
+      .prompt-label {
+        flex: 0 0 auto;
+        color: #f1f1f1;
         white-space: pre-wrap;
       }
 
-      .review-heading { margin-bottom: 9px; color: #fff; }
-      .review-line { display: flex; gap: 14px; margin: 2px 0; }
-      .review-label { min-width: 115px; color: #aaa; }
-      .tags-list, .review-values { margin-left: 13px; }
-      .create-row { display: flex; align-items: center; gap: 13px; margin-top: 15px; }
-      .create-button {
-        border: 1px solid var(--pink);
-        padding: 8px 13px;
-        background: var(--pink);
-        color: #151515;
+      .cli-input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        padding: 0;
+        background: transparent;
+        color: #fff;
+        caret-color: var(--pink);
         font: inherit;
-        font-weight: 700;
-        cursor: pointer;
       }
 
-      .create-button:hover { background: #ff78b4; }
-      .success { margin-top: 18px; color: var(--green); }
-      .success-details { margin-top: 10px; color: var(--text); }
-      .restart {
-        margin-top: 20px;
-        border: 0;
-        border-bottom: 1px solid #777;
-        padding: 2px 0;
-        background: transparent;
-        color: #bdbdbd;
-        font: inherit;
-        cursor: pointer;
-      }
+      .cli-input:disabled { opacity: .65; }
+      .input-hint { margin-top: 5px; color: #777; font-size: 10px; }
 
       @media (max-width: 600px) {
         .page-title { padding-bottom: 20px; }
-        .terminal { padding: 14px 13px 40px; font-size: 11px; }
-        .dashed { margin-left: -5px; padding: 7px; }
-        .review-label { min-width: 94px; }
+        .window { height: calc(100vh - 72px); min-height: 390px; }
+        .terminal { padding: 14px 13px 0; font-size: 11px; }
+        .input-hint { font-size: 9px; }
       }
     </style>
   </head>
@@ -187,220 +142,402 @@
         <span class="close">×</span>
       </div>
 
-      <section class="terminal" aria-label="Interactive blueprint creation terminal">
-        <p class="command">ken.fisher@hashicorp ~ $ tfctl blueprint create</p>
-
-        <p>Enter blueprint name: <input class="text-field name-field" id="blueprint-name" value="my-s3-blueprint" aria-label="Blueprint name"></p>
-        <p>Enter blueprint description: <input class="text-field description-field" id="blueprint-description" value="S3 bucket blueprint for dev workloads" aria-label="Blueprint description"></p>
-
-        <div class="dashed">
-          <p>Enter the registry module source: <input class="text-field source-field" id="module-source" value="terraform-aws-modules/s3-bucket/aws" aria-label="Registry module source"></p>
-          <p class="field-line">Select module version:</p>
-          <div class="choices" id="versions">
-            <label class="choice"><input type="radio" name="version" value="5.10.0" checked> <span class="marker">[x]</span> 5.10.0</label>
-            <label class="choice"><input type="radio" name="version" value="5.9.0"> <span class="marker">[ ]</span> 5.9.0</label>
-            <label class="choice"><input type="radio" name="version" value="5.8.0"> <span class="marker">[ ]</span> 5.8.0</label>
-            <label class="choice"><input type="radio" name="version" value="5.7.0"> <span class="marker">[ ]</span> 5.7.0</label>
+      <section class="terminal" aria-label="Interactive blueprint CLI">
+        <div class="output" id="output" role="log" aria-live="polite"></div>
+        <div class="input-dock">
+          <div class="active-line">
+            <label class="prompt-label" id="prompt-label" for="cli-input"></label>
+            <input id="cli-input" class="cli-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal input">
           </div>
+          <div class="input-hint">Enter to submit · blank accepts the default · use comma-separated numbers for lists · Ctrl+C cancels</div>
         </div>
-
-        <p class="section-title">Select Project(s):</p>
-        <div class="choices">
-          <label class="choice"><input type="checkbox" name="project" value="Project_1"> <span class="marker">[ ]</span> Project_1</label>
-          <label class="choice"><input type="checkbox" name="project" value="Project_2"> <span class="marker">[ ]</span> Project_2</label>
-          <label class="choice"><input type="checkbox" name="project" value="Project_3" checked> <span class="marker">[x]</span> Project_3</label>
-          <label class="choice"><input type="checkbox" name="project" value="Project_4"> <span class="marker">[ ]</span> Project_4</label>
-          <label class="choice"><input type="checkbox" name="project" value="Project_5"> <span class="marker">[ ]</span> Project_5</label>
-          <label class="choice"><input type="checkbox" name="project" value="Project_6"> <span class="marker">[ ]</span> Project_6</label>
-        </div>
-
-        <p class="section-title">Select environment(s):</p>
-        <div class="choices">
-          <label class="choice"><input type="checkbox" name="environment" value="Prod"> <span class="marker">[ ]</span> Prod</label>
-          <label class="choice"><input type="checkbox" name="environment" value="Test" checked> <span class="marker">[x]</span> Test</label>
-          <label class="choice"><input type="checkbox" name="environment" value="Dev"> <span class="marker">[ ]</span> Dev</label>
-          <label class="choice"><input type="checkbox" name="environment" value="Stage"> <span class="marker">[ ]</span> Stage</label>
-        </div>
-
-        <div class="dashed">
-          <p class="section-title" style="margin-top:0">TAGS</p>
-          <p class="divider">----</p>
-          <label class="choice"><input id="tag-toggle" type="checkbox" checked> Do you want this blueprint's resulting workspace or stack to have a tag? (Y/N)</label>
-          <div id="tag-fields">
-            <p class="field-line">Enter tag value: <input class="text-field" name="tag" value="test" aria-label="Tag value"></p>
-            <label class="choice"><input id="second-tag-toggle" type="checkbox" checked> Add another tag? (Y/N)</label>
-            <p class="field-line" id="second-tag">Enter tag value: <input class="text-field" name="tag" value="platform-team" aria-label="Second tag value"></p>
-            <label class="choice"><input id="third-tag-toggle" type="checkbox"> Add another tag? (Y/N)</label>
-            <p class="field-line" id="third-tag" hidden>Enter tag value: <input class="text-field" name="tag" value="" placeholder="tag value" aria-label="Third tag value"></p>
-          </div>
-        </div>
-
-        <p class="section-title">VARIABLE INPUTS</p>
-        <p class="divider">----------------</p>
-        <p>Variables were detected from registry artifact...</p>
-        <p>Select variables for which you would like to dictate input options...</p>
-        <div class="choices variable-options">
-          <label class="choice"><input type="checkbox" name="variable" value="bucket_name"> <span class="marker">[ ]</span> bucket_name (string)</label>
-          <label class="choice"><input type="checkbox" name="variable" value="retention_days" checked> <span class="marker">[x]</span> retention_days (list(number))</label>
-          <label class="choice"><input type="checkbox" name="variable" value="allow_storage_classes" checked> <span class="marker">[x]</span> allow_storage_classes (list(string))</label>
-        </div>
-
-        <div class="variable" data-variable="retention_days">
-          <p>Variable name: retention_days</p>
-          <p>Variable type: list(number)</p>
-          <p>Variable description: A list of valid retention periods (in days) that users can choose from.</p>
-          <div class="value-list" data-values="retention_days">
-            <p>Add an option (Y/N): Y</p>
-            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="7" aria-label="Retention days option"></div>
-            <p>Add another option (Y/N): Y</p>
-            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="14" aria-label="Retention days option"></div>
-            <p>Add another option (Y/N): Y</p>
-            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="30" aria-label="Retention days option"></div>
-            <button type="button" class="add-value" data-add-value="retention_days">+ Add option</button>
-          </div>
-        </div>
-
-        <div class="variable" data-variable="allow_storage_classes">
-          <p>Variable name: allow_storage_classes</p>
-          <p>Variable type: list(string)</p>
-          <p>Variable description: A list of storage classes users may choose from.</p>
-          <div class="value-list" data-values="allow_storage_classes">
-            <p>Add an option (Y/N): Y</p>
-            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="Standard" aria-label="Storage class option"></div>
-            <p>Add another option (Y/N): Y</p>
-            <div class="value-row"><span>Enter value:</span><input class="text-field value-field" value="Standard_IA" aria-label="Storage class option"></div>
-            <button type="button" class="add-value" data-add-value="allow_storage_classes">+ Add option</button>
-          </div>
-        </div>
-
-        <div class="review">
-          <p class="review-heading">REVIEW<br>-------</p>
-          <div id="review-content"></div>
-        </div>
-
-        <div class="create-row">
-          <button type="button" class="create-button" id="create-button">Create this blueprint</button>
-          <span>(Y/N)</span>
-        </div>
-        <div id="result" aria-live="polite"></div>
-        <button type="button" class="restart" id="restart">↻ Start over</button>
       </section>
     </main>
 
     <script>
-      const $ = (selector, root = document) => root.querySelector(selector);
-      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const output = document.querySelector("#output");
+      const promptLabel = document.querySelector("#prompt-label");
+      const input = document.querySelector("#cli-input");
+      const shellPrompt = "olivia.corley@hashicorp ~ $";
 
-      function selectedValues(name) {
-        return $$(`input[name="${name}"]:checked`).map(input => input.value);
+      const projects = ["Project_1", "Project_2", "Project_3", "Project_4", "Project_5", "Project_6"];
+      const environments = ["Prod", "Test", "Dev", "Stage"];
+      const versions = ["5.10.0", "5.9.0", "5.8.0", "5.7.0"];
+      const variables = [
+        { name: "bucket_name", type: "string", description: "The name of the S3 bucket.", defaults: [] },
+        { name: "retention_days", type: "list(number)", description: "A list of valid retention periods (in days) that users can choose from.", defaults: ["7", "14", "30"] },
+        { name: "allow_storage_classes", type: "list(string)", description: "A list of storage classes users may choose from.", defaults: ["Standard", "Standard_IA"] }
+      ];
+
+      let step = "command";
+      let activePrompt = null;
+      let commandHistory = [];
+      let historyIndex = 0;
+      let tagCount = 0;
+      let variableIndex = 0;
+      let blueprint;
+
+      function appendLine(text = "", style = "") {
+        const line = document.createElement("div");
+        line.className = `line ${style}`.trim();
+        line.textContent = text;
+        output.append(line);
+        output.scrollTop = output.scrollHeight;
       }
 
-      function variableValues(name) {
-        const values = $$(`[data-values="${name}"] .value-field`)
-          .map(input => input.value.trim())
-          .filter(Boolean);
-        return values;
-      }
-
-      function refreshReview() {
-        $$(".choice").forEach(label => {
-          const input = $("input", label);
-          const marker = $(".marker", label);
-          if (input && marker) marker.textContent = input.checked ? "[x]" : "[ ]";
-        });
-        const projects = selectedValues("project");
-        const environments = selectedValues("environment");
-        const version = $('input[name="version"]:checked').value;
-        const tags = $("#tag-toggle").checked
-          ? $$('input[name="tag"]').map(input => input.value.trim()).filter(Boolean)
-          : [];
-        const variables = selectedValues("variable");
-        const lines = [
-          ["Blueprint name:", $("#blueprint-name").value || "—"],
-          ["Source:", `${$("#module-source").value || "—"}@${version}`],
-          ["Configuration:", "Stack"],
-          ["Projects:", projects.join(", ") || "—"],
-          ["Environments:", environments.join(", ") || "—"],
-          ["", ""],
-          ["Tags:", tags.join(", ") || "—"],
-          ["", ""],
-          ["Variables:", variables.length ? "" : "—"]
-        ];
-
-        const rows = lines.map(([label, value]) => label
-          ? `<div class="review-line"><span class="review-label">${label}</span><span>${escapeHtml(value)}</span></div>`
-          : `<div class="review-line" aria-hidden="true">&nbsp;</div>`).join("");
-        const variableRows = variables.map(name => {
-          const label = name === "retention_days" ? "retention_days" : name;
-          const values = variableValues(name);
-          return `<div class="review-values">${escapeHtml(label)}${values.map(value => `<br>&nbsp;&nbsp;- ${escapeHtml(value)}`).join("")}</div>`;
-        }).join("");
-        $("#review-content").innerHTML = rows + variableRows;
-
-        $$(".variable").forEach(section => {
-          const input = $(`input[name="variable"][value="${section.dataset.variable}"]`);
-          section.hidden = !input.checked;
-        });
-        $("#tag-fields").hidden = !$("#tag-toggle").checked;
-        $("#second-tag").hidden = !$("#second-tag-toggle").checked;
-        $("#third-tag").hidden = !$("#third-tag-toggle").checked;
-      }
-
-      function escapeHtml(value) {
-        return value.replace(/[&<>"']/g, char => ({
-          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-        })[char]);
-      }
-
-      function addOption(name) {
-        const container = $(`[data-values="${name}"]`);
-        const row = document.createElement("div");
-        row.className = "value-row";
-        const label = document.createElement("span");
-        label.textContent = "Enter value:";
-        const input = document.createElement("input");
-        input.className = "text-field value-field";
-        input.setAttribute("aria-label", `${name.replaceAll("_", " ")} option`);
-        row.append(label, input);
-        container.insertBefore(row, $(`[data-add-value="${name}"]`));
+      function ask(label, defaultValue, handler) {
+        activePrompt = { label, defaultValue, handler };
+        step = label === shellPrompt ? "command" : step;
+        promptLabel.textContent = defaultValue === undefined
+          ? `${label} `
+          : `${label} [${defaultValue}]: `;
+        input.value = "";
+        input.placeholder = "";
+        input.disabled = false;
         input.focus();
-        refreshReview();
+        output.scrollTop = output.scrollHeight;
       }
 
-      document.addEventListener("input", refreshReview);
-      document.addEventListener("change", refreshReview);
-      $$("[data-add-value]").forEach(button => {
-        button.addEventListener("click", () => addOption(button.dataset.addValue));
-      });
+      function echoPrompt(answer) {
+        const { label, defaultValue } = activePrompt;
+        const prompt = defaultValue === undefined ? label : `${label} [${defaultValue}]:`;
+        appendLine(`${prompt}${answer ? ` ${answer}` : ""}`, label === shellPrompt ? "command" : "");
+      }
 
-      $("#create-button").addEventListener("click", () => {
-        const name = $("#blueprint-name").value.trim();
-        if (!name) {
-          $("#blueprint-name").focus();
-          $("#result").innerHTML = '<p class="success">Enter a blueprint name before creating.</p>';
+      function submit() {
+        if (!activePrompt || input.disabled) return;
+        const typed = input.value.trim();
+        const answer = typed || activePrompt.defaultValue || "";
+        const handler = activePrompt.handler;
+        echoPrompt(answer);
+        input.value = "";
+        handler(typed, answer);
+      }
+
+      function beginShell() {
+        step = "command";
+        ask(shellPrompt, undefined, handleCommand);
+      }
+
+      function handleCommand(typed, command) {
+        const normalized = command.trim().toLowerCase();
+        if (normalized === "help") {
+          appendLine("Available commands:");
+          appendLine("  tfctl blueprint create   Create a blueprint", "muted");
+          appendLine("  clear                    Clear the terminal", "muted");
+          appendLine("  help                     Show this help", "muted");
+          beginShell();
           return;
         }
-        const id = `bp-${Math.floor(100000 + Math.random() * 900000)}`;
-        $("#result").innerHTML = `
-          <p class="success">Creating blueprint "${escapeHtml(name)}"...<br><br>Blueprint created successfully.</p>
-          <div class="success-details">
-            Blueprint name: &nbsp;&nbsp; ${escapeHtml(name)}<br>
-            Blueprint ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${id}<br>
-            Description: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml($("#blueprint-description").value)}<br>
-            Configuration: &nbsp;&nbsp;&nbsp; Stack<br>
-            Projects: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml(selectedValues("project").join(", ") || "—")}<br>
-            Environments: &nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml(selectedValues("environment").join(", ") || "—")}<br>
-            Source: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml($("#module-source").value)}<br>
-            Version: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${escapeHtml($('input[name="version"]:checked').value)}<br>
-            Status: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ready<br>
-            Created at: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${new Date().toISOString()}
-          </div>`;
-        $("#create-button").disabled = true;
-        $("#create-button").textContent = "Blueprint created";
+        if (normalized === "clear") {
+          output.replaceChildren();
+          beginShell();
+          return;
+        }
+        if (normalized === "tfctl blueprint create") {
+          beginWizard();
+          return;
+        }
+        appendLine(`tfctl: command not found: ${command || "(empty input)"}`, "error");
+        beginShell();
+      }
+
+      function beginWizard() {
+        blueprint = {
+          name: "",
+          description: "",
+          source: "terraform-aws-modules/s3-bucket/aws",
+          version: versions[0],
+          projects: [projects[2]],
+          environments: [environments[1]],
+          tags: [],
+          selectedVariables: [],
+          variableValues: {}
+        };
+        tagCount = 0;
+        appendLine("Starting blueprint creation...", "muted");
+        askName();
+      }
+
+      function askName() {
+        step = "name";
+        ask("Enter blueprint name:", "my-s3-blueprint", (typed, answer) => {
+          if (!answer.trim()) return invalid("Blueprint name cannot be empty.", askName);
+          blueprint.name = answer.trim();
+          askDescription();
+        });
+      }
+
+      function askDescription() {
+        step = "description";
+        ask("Enter blueprint description:", "S3 bucket blueprint for dev workloads", (typed, answer) => {
+          blueprint.description = answer.trim();
+          askSource();
+        });
+      }
+
+      function askSource() {
+        step = "source";
+        ask("Enter the registry module source:", blueprint.source, (typed, answer) => {
+          if (!answer.trim()) return invalid("Module source cannot be empty.", askSource);
+          blueprint.source = answer.trim();
+          askVersion();
+        });
+      }
+
+      function listChoices(title, choices, selected = []) {
+        appendLine(title, "section");
+        choices.forEach((choice, index) => {
+          const value = typeof choice === "string" ? choice : choice.name;
+          const mark = selected.includes(value) ? "x" : " ";
+          appendLine(`[${mark}] ${index + 1}. ${value}`);
+        });
+      }
+
+      function parseOne(value, choices, defaultIndex) {
+        if (!value) return choices[defaultIndex];
+        const index = Number.parseInt(value, 10);
+        if (Number.isInteger(index) && String(index) === value && index >= 1 && index <= choices.length) {
+          return choices[index - 1];
+        }
+        return choices.find(choice => choice.toLowerCase() === value.toLowerCase()) || null;
+      }
+
+      function parseMany(value, choices, defaults) {
+        if (!value) return defaults;
+        const selected = [];
+        for (const token of value.split(",").map(part => part.trim()).filter(Boolean)) {
+          const index = Number.parseInt(token, 10);
+          const choice = Number.isInteger(index) && String(index) === token
+            ? choices[index - 1]
+            : choices.find(item => item.toLowerCase() === token.toLowerCase());
+          if (!choice) return null;
+          if (!selected.includes(choice)) selected.push(choice);
+        }
+        return selected.length ? selected : null;
+      }
+
+      function askVersion() {
+        step = "version";
+        listChoices("Select module version:", versions, [blueprint.version]);
+        ask("Version", "1", (typed, answer) => {
+          const version = parseOne(answer, versions, 0);
+          if (!version) return invalid("Choose a version number from the list.", askVersion);
+          blueprint.version = version;
+          askProjects();
+        });
+      }
+
+      function askProjects() {
+        step = "projects";
+        listChoices("Select Project(s):", projects, blueprint.projects);
+        ask("Project numbers (comma-separated)", "3", (typed, answer) => {
+          const selected = parseMany(answer, projects, [projects[2]]);
+          if (!selected) return invalid("Enter one or more project numbers from the list.", askProjects);
+          blueprint.projects = selected;
+          askEnvironments();
+        });
+      }
+
+      function askEnvironments() {
+        step = "environments";
+        listChoices("Select environment(s):", environments, blueprint.environments);
+        ask("Environment numbers (comma-separated)", "2", (typed, answer) => {
+          const selected = parseMany(answer, environments, [environments[1]]);
+          if (!selected) return invalid("Enter one or more environment numbers from the list.", askEnvironments);
+          blueprint.environments = selected;
+          askTags();
+        });
+      }
+
+      function askTags() {
+        step = "tags";
+        appendLine("TAGS", "section");
+        appendLine("----", "muted");
+        ask("Add tags to the resulting workspace or stack? (Y/n)", "Y", (typed, answer) => {
+          if (/^(n|no)$/i.test(answer)) {
+            blueprint.tags = [];
+            askVariables();
+            return;
+          }
+          if (!/^(y|yes)$/i.test(answer)) return invalid("Enter Y or N.", askTags);
+          tagCount = 0;
+          askTagValue();
+        });
+      }
+
+      function askTagValue() {
+        const defaults = ["environment=test", "owner=platform-team", "cost_center=4451"];
+        const defaultValue = defaults[tagCount];
+        ask("Enter tag (key=value)", defaultValue, (typed, answer) => {
+          const separator = answer.indexOf("=");
+          if (separator <= 0 || !answer.slice(separator + 1).trim()) {
+            return invalid("Use key=value format, for example environment=test.", askTagValue);
+          }
+          const key = answer.slice(0, separator).trim();
+          const value = answer.slice(separator + 1).trim();
+          blueprint.tags.push({ key, value });
+          tagCount += 1;
+          askAnotherTag();
+        });
+      }
+
+      function askAnotherTag() {
+        const defaultValue = tagCount === 1 ? "Y" : "N";
+        ask("Add another tag? (y/N)", defaultValue, (typed, answer) => {
+          if (/^(y|yes)$/i.test(answer)) {
+            if (tagCount >= 10) {
+              appendLine("Maximum of 10 tags reached.", "muted");
+              return askVariables();
+            }
+            askTagValue();
+          } else if (/^(n|no)$/i.test(answer)) {
+            askVariables();
+          } else {
+            invalid("Enter Y or N.", askAnotherTag);
+          }
+        });
+      }
+
+      function askVariables() {
+        step = "variables";
+        listChoices("VARIABLE INPUTS — select variables to configure:", variables.map(item => `${item.name} (${item.type})`), [
+          "retention_days (list(number))",
+          "allow_storage_classes (list(string))"
+        ]);
+        ask("Variable numbers (comma-separated, or none)", "2,3", (typed, answer) => {
+          if (/^(none|no|skip)$/i.test(answer)) {
+            blueprint.selectedVariables = [];
+            showReview();
+            return;
+          }
+          const labels = variables.map(item => `${item.name} (${item.type})`);
+          const selected = parseMany(answer, labels, [labels[1], labels[2]]);
+          if (!selected) return invalid("Enter one or more variable numbers from the list.", askVariables);
+          blueprint.selectedVariables = variables.filter(item => selected.includes(`${item.name} (${item.type})`));
+          variableIndex = 0;
+          askVariableValues();
+        });
+      }
+
+      function askVariableValues() {
+        if (variableIndex >= blueprint.selectedVariables.length) {
+          showReview();
+          return;
+        }
+        const variable = blueprint.selectedVariables[variableIndex];
+        appendLine(`Variable name: ${variable.name}`, "section");
+        appendLine(`Variable type: ${variable.type}`);
+        appendLine(`Variable description: ${variable.description}`);
+        const defaultValue = variable.defaults.length ? variable.defaults.join(",") : undefined;
+        ask(`Allowed values for ${variable.name} (comma-separated)`, defaultValue, (typed, answer) => {
+          const values = answer.split(",").map(value => value.trim()).filter(Boolean);
+          if (variable.type.startsWith("list(number)") && values.some(value => !Number.isFinite(Number(value)))) {
+            return invalid("This variable accepts numbers only.", () => askVariableValues());
+          }
+          blueprint.variableValues[variable.name] = values;
+          variableIndex += 1;
+          askVariableValues();
+        });
+      }
+
+      function showReview() {
+        step = "review";
+        appendLine("REVIEW", "section");
+        appendLine("-------", "muted");
+        appendLine(`Blueprint name:  ${blueprint.name}`);
+        appendLine(`Source:          ${blueprint.source}@${blueprint.version}`);
+        appendLine("Configuration:   Stack");
+        appendLine(`Projects:        ${blueprint.projects.join(", ")}`);
+        appendLine(`Environments:    ${blueprint.environments.join(", ")}`);
+        if (blueprint.tags.length) {
+          appendLine("");
+          appendLine("Tags:");
+          blueprint.tags.forEach(tag => appendLine(`  ${tag.key}: ${tag.value}`));
+        }
+        if (blueprint.selectedVariables.length) {
+          appendLine("");
+          appendLine("Variables:");
+          blueprint.selectedVariables.forEach(variable => {
+            appendLine(`  ${variable.name}`);
+            (blueprint.variableValues[variable.name] || []).forEach(value => appendLine(`    - ${value}`));
+          });
+        }
+        ask("Create this blueprint? (Y/n)", "Y", (typed, answer) => {
+          if (/^(n|no)$/i.test(answer)) {
+            appendLine("Blueprint creation cancelled.", "muted");
+            return beginShell();
+          }
+          if (!/^(y|yes)$/i.test(answer)) return invalid("Enter Y or N.", showReview);
+          createBlueprint();
+        });
+      }
+
+      function createBlueprint() {
+        step = "creating";
+        input.disabled = true;
+        appendLine(`Creating blueprint "${blueprint.name}"...`);
+        window.setTimeout(() => {
+          const id = `bp-${Math.floor(100000 + Math.random() * 900000)}`;
+          appendLine("");
+          appendLine("Blueprint created successfully.", "success");
+          appendLine(`Blueprint name:  ${blueprint.name}`);
+          appendLine(`Blueprint ID:    ${id}`);
+          appendLine(`Description:     ${blueprint.description}`);
+          appendLine("Configuration:   Stack");
+          appendLine(`Projects:        ${blueprint.projects.join(", ")}`);
+          appendLine(`Environments:    ${blueprint.environments.join(", ")}`);
+          appendLine(`Source:          ${blueprint.source}`);
+          appendLine(`Version:         ${blueprint.version}`);
+          appendLine(`Tags:            ${blueprint.tags.map(tag => `${tag.key}=${tag.value}`).join(", ") || "—"}`);
+          appendLine("Status:          Ready");
+          appendLine(`Created at:      ${new Date().toISOString()}`);
+          appendLine("");
+          beginShell();
+        }, 500);
+      }
+
+      function invalid(message, retry) {
+        appendLine(message, "error");
+        retry();
+      }
+
+      function cancel() {
+        appendLine("^C", "muted");
+        appendLine("Blueprint creation cancelled.", "muted");
+        beginShell();
+      }
+
+      input.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          const value = input.value.trim();
+          if (value && step === "command") {
+            commandHistory.push(value);
+            historyIndex = commandHistory.length;
+          }
+          submit();
+          return;
+        }
+        if (event.key === "ArrowUp" && step === "command" && commandHistory.length) {
+          event.preventDefault();
+          historyIndex = Math.max(0, historyIndex - 1);
+          input.value = commandHistory[historyIndex] || "";
+        } else if (event.key === "ArrowDown" && step === "command") {
+          event.preventDefault();
+          historyIndex = Math.min(commandHistory.length, historyIndex + 1);
+          input.value = commandHistory[historyIndex] || "";
+        } else if (event.key.toLowerCase() === "c" && event.ctrlKey && step !== "command") {
+          event.preventDefault();
+          cancel();
+        }
       });
 
-      $("#restart").addEventListener("click", () => window.location.reload());
-      refreshReview();
+      document.querySelector(".terminal").addEventListener("click", () => input.focus());
+      appendLine("tfctl — self-service blueprint CLI", "muted");
+      appendLine("Type `tfctl blueprint create` to get started, or `help` for commands.", "muted");
+      appendLine("");
+      beginShell();
     </script>
   </body>
 </html>
